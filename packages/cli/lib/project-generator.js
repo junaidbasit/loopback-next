@@ -6,6 +6,7 @@
 'use strict';
 const BaseGenerator = require('./base-generator');
 const utils = require('./utils');
+const chalk = require('chalk');
 
 module.exports = class ProjectGenerator extends BaseGenerator {
   // Note: arguments and options should be defined in the constructor.
@@ -15,11 +16,20 @@ module.exports = class ProjectGenerator extends BaseGenerator {
     // This list gets shown to users to let them select the appropriate
     // build settings for their project.
     this.buildOptions = [
-      'tslint',
-      'prettier',
-      'mocha',
-      'loopbackBuild',
-      'vscode',
+      {
+        name: 'tslint',
+        description: 'adds a linter with pre-configured lint rules',
+      },
+      {
+        name: 'prettier',
+        description: 'installs prettier for consistent code formatting',
+      },
+      {name: 'mocha', description: 'installs mocha as a dependency'},
+      {
+        name: 'loopbackBuild',
+        description: 'sets up TypeScript compiler with other features ',
+      },
+      {name: 'vscode', description: 'adds VSCode config files'},
     ];
   }
 
@@ -101,6 +111,9 @@ module.exports = class ProjectGenerator extends BaseGenerator {
       this.buildOptions,
     );
     this.projectOptions.forEach(n => {
+      if (typeof n === 'object') {
+        n = n.name;
+      }
       if (this.options[n]) {
         this.projectInfo[n] = this.options[n];
       }
@@ -158,10 +171,10 @@ module.exports = class ProjectGenerator extends BaseGenerator {
     if (this.shouldExit()) return false;
     const choices = [];
     this.buildOptions.forEach(f => {
-      if (!this.options[f]) {
+      if (!this.options[f.name]) {
         choices.push({
-          name: 'Enable ' + f,
-          key: f,
+          name: `Enable ${f.name}: ${chalk.gray(f.description)}`,
+          key: f.name,
           checked: true,
         });
       }
@@ -177,11 +190,11 @@ module.exports = class ProjectGenerator extends BaseGenerator {
       },
     ];
     return this.prompt(prompts).then(props => {
-      const settings = props.settings || choices.map(c => c.name);
+      const settings = props.settings || choices.map(c => c.name.split(':')[0]);
       const features = choices.map(c => {
         return {
           key: c.key,
-          value: settings.indexOf(c.name) !== -1,
+          value: settings.indexOf(c.name.split(':')[0]) !== -1,
         };
       });
       features.forEach(f => (this.projectInfo[f.key] = f.value));

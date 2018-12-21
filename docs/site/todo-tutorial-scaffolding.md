@@ -23,13 +23,13 @@ $ lb4 app
 ? Project root directory: (todo-list)
 ? Application class name: (TodoListApplication)
 ? Select features to enable in the project:
-❯◉ Enable tslint
- ◉ Enable prettier
- ◉ Enable mocha
- ◉ Enable loopbackBuild
- ◉ Enable vscode
- ◉ Enable repositories
- ◉ Enable services
+❯◉ Enable tslint: adds a linter with pre-configured lint rules
+ ◉ Enable prettier: installs prettier for consistent code formatting
+ ◉ Enable mocha: installs mocha as a dependency
+ ◉ Enable loopbackBuild: sets up TypeScript compiler with other features
+ ◉ Enable vscode: adds VSCode config files
+ ◉ Enable repositories: includes repository imports and RepositoryMixin
+ ◉ Enable services: includes service-proxy imports and ServiceMixin
  # npm will install dependencies now
  Application todo-list was created in todo-list.
 ```
