@@ -32,6 +32,8 @@ for us as follows:
 $ lb4 model
 ? Model class name: TodoList
 ? Please select the model base class Entity
+? Disable strict mode for this model? No
+
 Let's add a property to TodoList
 Enter an empty property name when done
 

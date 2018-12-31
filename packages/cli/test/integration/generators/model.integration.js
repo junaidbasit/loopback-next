@@ -92,6 +92,7 @@ describe('lb4 model integration', () => {
           name: 'test',
           propName: null,
           modelBaseClass: 'Model',
+          disabledStrictMode: false,
         });
 
       assert.file(expectedModelFile);
@@ -133,6 +134,34 @@ describe('lb4 model integration', () => {
       assert.fileContent(
         expectedModelFile,
         /export class Test extends ProductReview {/,
+      );
+    });
+
+    it('scaffolds model with strict setting disabled', async () => {
+      await testUtils
+        .executeGenerator(generator)
+        .inDir(SANDBOX_PATH, () => testUtils.givenLBProject(SANDBOX_PATH))
+        .withPrompts({
+          name: 'test',
+          propName: null,
+          modelBaseClass: 'Entity',
+          disabledStrictMode: true,
+        });
+
+      assert.file(expectedModelFile);
+      assert.file(expectedIndexFile);
+
+      assert.fileContent(
+        expectedModelFile,
+        /import {Entity, model, property} from '@loopback\/repository';/,
+      );
+      assert.fileContent(
+        expectedModelFile,
+        /@model\({settings: {strict: false}}\)/,
+      );
+      assert.fileContent(
+        expectedModelFile,
+        /export class Test extends Entity {/,
       );
     });
 

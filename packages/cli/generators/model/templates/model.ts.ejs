@@ -5,7 +5,11 @@ import {model, property} from '@loopback/repository';
 import {<%= modelBaseClass %>} from '.';
 <% } -%>
 
+<% if(disabledStrictMode) { -%>
+@model({settings: {strict: false}})
+<% } else { -%>
 @model()
+<% } -%>
 export class <%= className %> extends <%= modelBaseClass %> {
 <% Object.entries(properties).forEach(([key, val]) => { -%>
   @property({
